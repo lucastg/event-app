@@ -7,10 +7,9 @@ import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
 import org.myaplication.application.presenters.requests.EventoDto;
-import org.myaplication.domain.ports.in.AlterarEventoUseCasePort;
-import org.myaplication.domain.ports.in.CriarEventoUseCasePort;
-import org.myaplication.domain.ports.in.BuscarEventoPorIdUseCasePort;
-import org.myaplication.domain.ports.in.ListarEventosUseCasePort;
+import org.myaplication.domain.ports.in.*;
+
+import java.util.NoSuchElementException;
 
 @Path("/app/v1/evento")
 @Produces(MediaType.APPLICATION_JSON)
@@ -28,6 +27,9 @@ public class EventoController {
 
     @Inject
     AlterarEventoUseCasePort alterarEventoUseCasePort;
+
+    @Inject
+    DeletarEventoUseCasePort deletarEventoUseCasePort;
 
 
     @GET
@@ -47,29 +49,64 @@ public class EventoController {
     public Response buscarEventoPorId(@PathParam(value = "id") Integer id) throws RuntimeException {
         try {
             return Response.ok(buscarEventoPorIdUseCasePort.buscarEventoPorId(id)).build();
+
+        } catch (IllegalArgumentException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+
         } catch (Exception e) {
-            return Response.status(Response.Status.NOT_FOUND).entity("Registro nao encontrado com id:" + id).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro inesperado: " + e.getMessage()).build();
         }
     }
 
     @POST
     @Path("")
     @Transactional
-    public Response criarEvento(@Valid EventoDto request) throws RuntimeException {
+    public Response criarEvento(@Valid EventoDto request) throws IllegalArgumentException {
         try {
             criarEventoUseCasePort.criarEvento(request);
             return Response.ok().entity("Evento criado com sucesso!").build();
+
+        } catch (IllegalStateException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+
         } catch (Exception e) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("Não foi possivel cadastrar o evento!").build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro inesperado: " + e.getMessage()).build();
         }
     }
 
     @PUT
-    @Path("")
+    @Path("/{id}")
     @Transactional
-    public Response alterarEvento(@Valid EventoDto request) {
-        alterarEventoUseCasePort.alterarEvento(request);
-        return null;
+    public Response alterarEvento(@PathParam(value = "id") Integer id, @Valid EventoDto request) {
+        try {
+            alterarEventoUseCasePort.alterarEvento(id,request);
+            return Response.ok().entity("Evento editado com sucesso!").build();
+
+        } catch (IllegalStateException e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro inesperado: " + e.getMessage()).build();
+        }
+    }
+
+    @DELETE
+    @Path("/{id}")
+    @Transactional
+    public Response deletarEvento(@PathParam(value = "id") Integer id) {
+        try {
+            deletarEventoUseCasePort.deletarEvento(id);
+            return Response.ok().entity("Deletado com sucesso!").build();
+
+        } catch (NoSuchElementException e) {
+            return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro inesperado: " + e.getMessage()).build();
+        }
     }
 
 }

@@ -2,30 +2,30 @@ package org.myaplication.domain.usecases.eventos;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
-import org.myaplication.application.presenters.mappers.EventoMapper;
-import org.myaplication.domain.entities.Evento;
 import org.myaplication.domain.ports.in.BuscarEventoPorIdUseCasePort;
+import org.myaplication.domain.ports.in.DeletarEventoUseCasePort;
 import org.myaplication.domain.ports.out.EventoPersistancePort;
 
 import java.util.NoSuchElementException;
 
 @ApplicationScoped
-public class BuscarEventoPorIdUseCase implements BuscarEventoPorIdUseCasePort {
+public class DeletarEventoUseCase implements DeletarEventoUseCasePort {
 
     @Inject
     EventoPersistancePort eventoPersistancePort;
 
     @Inject
-    EventoMapper eventoMapper;
+    EventoPersistancePort eventoPersistance;
+
+    @Inject
+    BuscarEventoPorIdUseCasePort buscarEventoPorId;
 
     @Override
-    public Evento buscarEventoPorId(Integer id) {
-        var result = eventoPersistancePort.buscarEventoPorId(id);
-
-        if(result.isEmpty()){
+    public void deletarEvento(Integer id) {
+        var te = eventoPersistancePort.buscarEventoPorId(id);
+        if (te.isEmpty()) {
             throw new NoSuchElementException("Evento não encontrado com ID: " + id );
         }
-
-        return eventoMapper.toDomain(result);
+        eventoPersistance.deletarEvento(id);
     }
 }

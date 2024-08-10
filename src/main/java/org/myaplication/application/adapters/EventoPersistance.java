@@ -6,9 +6,11 @@ import lombok.AllArgsConstructor;
 import org.myaplication.application.presenters.mappers.EventoMapper;
 import org.myaplication.domain.entities.Evento;
 import org.myaplication.domain.ports.out.EventoPersistancePort;
+import org.myaplication.infrastructure.db.entity.EventoEntity;
 import org.myaplication.infrastructure.db.repositories.EventoRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 @ApplicationScoped
 @AllArgsConstructor
@@ -22,26 +24,18 @@ public class EventoPersistance implements EventoPersistancePort {
 
 
     @Override
-    public List<Evento> listarEventos() {
-        var eventos = eventoRepository.findAll().list();
-        if (eventos == null) {
-            throw new RuntimeException("Sem Registros");
-        }
-        return eventos.stream().map(eventoEntity -> eventoMapper.toDomain(eventoEntity)).toList();
+    public List<EventoEntity> listarEventos() {
+        return eventoRepository.findAll().list();
     }
 
     @Override
-    public Evento buscarEventoPorId(Integer id) {
-        var eventoEntity = eventoRepository.findById(id);
-        if (eventoEntity == null) {
-            throw new RuntimeException("Registro nao encontrado com id:" + id);
-        }
-        return eventoMapper.toDomain(eventoEntity);
+    public Optional<EventoEntity> buscarEventoPorId(Integer id) {
+        return eventoRepository.findByIdOptional(id);
     }
 
     @Override
-    public Evento buscarEventoPorNome(String nome) {
-        return eventoMapper.toDomain(eventoRepository.findNomeByNativeQuery(nome));
+    public Optional<EventoEntity> buscarEventoPorNome(String nome) {
+        return eventoRepository.findByNome(nome);
     }
 
     @Override
@@ -50,8 +44,14 @@ public class EventoPersistance implements EventoPersistancePort {
     }
 
     @Override
-    public Evento alterarEvento(Evento evento) {
-        eventoRepository.persist(eventoMapper.toEntity(evento));
-        return evento;
+    public void alterarEvento(Evento evento) {
+        eventoRepository.findByIdOptional(evento.getId());
+        var eventoEntity = eventoMapper.toEntity(evento);
+        eventoRepository.persist(eventoEntity);
+    }
+
+    @Override
+    public void deletarEvento(Integer id) {
+        eventoRepository.deleteById(id);
     }
 }

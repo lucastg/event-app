@@ -1,18 +1,22 @@
 package org.myaplication.domain.ports.out;
 
 import org.myaplication.domain.entities.Evento;
+import org.myaplication.infrastructure.db.entity.EventoEntity;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface EventoPersistancePort {
 
-    List<Evento> listarEventos();
+    List<EventoEntity> listarEventos();
 
-    Evento buscarEventoPorId(Integer id);
+    Optional<EventoEntity> buscarEventoPorId(Integer id);
 
-    Evento buscarEventoPorNome(String nome);
+    Optional<EventoEntity> buscarEventoPorNome(String nome);
 
     void criarEvento(Evento evento);
 
-    Evento alterarEvento(Evento evento);
+    void alterarEvento(Evento evento);
+
+    void deletarEvento(Integer id);
 }

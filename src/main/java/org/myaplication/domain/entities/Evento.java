@@ -18,10 +18,10 @@ public class Evento {
     private Date dataFinal;
     private Boolean ativo;
 
-    public Evento(
-            @NotBlank String nome,
-            @NotBlank Date dataInicial,
-            @NotBlank Date dataFinal,
-            @NotBlank Boolean ativo) {
+    public Evento(@NotBlank String nome, @NotBlank Date dataInicial, @NotBlank Date dataFinal, @NotBlank Boolean ativo) {
+        this.nome = nome;
+        this.dataInicial = dataInicial;
+        this.dataFinal = dataFinal;
+        this.ativo = ativo;
     }
 }

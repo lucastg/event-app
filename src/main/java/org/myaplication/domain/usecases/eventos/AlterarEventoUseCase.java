@@ -2,10 +2,12 @@ package org.myaplication.domain.usecases.eventos;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import org.myaplication.application.presenters.mappers.EventoMapper;
 import org.myaplication.application.presenters.requests.EventoDto;
-import org.myaplication.domain.entities.Evento;
 import org.myaplication.domain.ports.in.AlterarEventoUseCasePort;
 import org.myaplication.domain.ports.out.EventoPersistancePort;
+
+import java.util.NoSuchElementException;
 
 @ApplicationScoped
 public class AlterarEventoUseCase implements AlterarEventoUseCasePort {
@@ -14,13 +16,24 @@ public class AlterarEventoUseCase implements AlterarEventoUseCasePort {
     EventoPersistancePort eventoPersistancePort;
 
     @Inject
-    BuscarEventoPorNomeUseCase buscarEventoPorNome;
+    EventoPersistancePort eventoPersistance;
+
+    @Inject
+    EventoMapper eventoMapper;
 
     @Override
-    public Evento alterarEvento(EventoDto eventoDto) {
-        buscarEventoPorNome.buscarEventoPorNome(eventoDto.getNome());
+    public void alterarEvento(Integer id, EventoDto eventoDto) {
+        var result = eventoMapper.toDomain(eventoPersistance.buscarEventoPorId(id));
 
-        var evento = new Evento(eventoDto.getNome(), eventoDto.getDataInicial(), eventoDto.getDataFinal(), eventoDto.getAtivo());
-        return eventoPersistancePort.alterarEvento(evento);
+        if(result == null) {
+            throw new NoSuchElementException("Evento não encontrado com ID: " + id );
+        }
+
+        result.setNome(eventoDto.getNome().toUpperCase());
+        result.setDataInicial(eventoDto.getDataInicial());
+        result.setDataFinal(eventoDto.getDataFinal());
+        result.setAtivo(eventoDto.getAtivo());
+
+        eventoPersistancePort.alterarEvento(result);
     }
 }

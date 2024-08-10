@@ -31,10 +31,22 @@ public class EventoEntity {
     @Column(nullable = false)
     private Boolean ativo;
 
-    @OneToOne
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     @JoinColumn(name = "id_instituicao")
     private InstituicaoEntity instituicao;
 
     public EventoEntity(Integer id, String nome, Date dataInicial, Date dataFinal, Boolean ativo) {
+        this.id = id;
+        this.nome = nome;
+        this.dataInicial = dataInicial;
+        this.dataFinal = dataFinal;
+        this.ativo = ativo;
+    }
+
+    public EventoEntity(String nome, Date dataInicial, Date dataFinal, Boolean ativo) {
+        this.nome = nome;
+        this.dataInicial = dataInicial;
+        this.dataFinal = dataFinal;
+        this.ativo = ativo;
     }
 }
