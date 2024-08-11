@@ -16,7 +16,7 @@ public class Evento {
     private String nome;
     private Date dataInicial;
     private Date dataFinal;
-    private Boolean ativo;
+    private Boolean ativo = false;
 
     public Evento(@NotBlank String nome, @NotBlank Date dataInicial, @NotBlank Date dataFinal, @NotBlank Boolean ativo) {
         this.nome = nome;

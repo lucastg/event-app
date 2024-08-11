@@ -5,6 +5,7 @@ import jakarta.inject.Inject;
 import org.myaplication.application.presenters.mappers.EventoMapper;
 import org.myaplication.application.presenters.requests.EventoDto;
 import org.myaplication.domain.ports.in.AlterarEventoUseCasePort;
+import org.myaplication.domain.ports.in.VerificarEAtualizarStatusEventoUseCasePort;
 import org.myaplication.domain.ports.out.EventoPersistancePort;
 
 import java.util.NoSuchElementException;
@@ -21,19 +22,21 @@ public class AlterarEventoUseCase implements AlterarEventoUseCasePort {
     @Inject
     EventoMapper eventoMapper;
 
+    @Inject
+    VerificarEAtualizarStatusEventoUseCasePort verificarEAtualizarStatusEventoUseCasePort;
+
     @Override
     public void alterarEvento(Integer id, EventoDto eventoDto) {
         var result = eventoMapper.toDomain(eventoPersistance.buscarEventoPorId(id));
-
         if(result == null) {
             throw new NoSuchElementException("Evento não encontrado com ID: " + id );
         }
 
+        verificarEAtualizarStatusEventoUseCasePort.verificarStatusEvento(eventoDto);
         result.setNome(eventoDto.getNome().toUpperCase());
         result.setDataInicial(eventoDto.getDataInicial());
         result.setDataFinal(eventoDto.getDataFinal());
         result.setAtivo(eventoDto.getAtivo());
-
         eventoPersistancePort.alterarEvento(result);
     }
 }

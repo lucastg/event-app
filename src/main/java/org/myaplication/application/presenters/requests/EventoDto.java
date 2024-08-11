@@ -1,6 +1,8 @@
 package org.myaplication.application.presenters.requests;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.annotation.Nonnull;
+import jakarta.annotation.Nullable;
 import jakarta.validation.constraints.NotBlank;
 import lombok.*;
 
@@ -25,7 +27,7 @@ public class EventoDto {
     @NotBlank
     private Date dataFinal;
 
-    @Nonnull
-    @NotBlank
+    @JsonInclude(JsonInclude.Include.NON_NULL)
+    @Nullable
     private Boolean ativo;
 }

@@ -69,7 +69,7 @@ public class EventoController {
             criarEventoUseCasePort.criarEvento(request);
             return Response.ok().entity("Evento criado com sucesso!").build();
 
-        } catch (IllegalStateException e) {
+        } catch (IllegalArgumentException e) {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
 
         } catch (Exception e) {

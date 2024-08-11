@@ -45,13 +45,26 @@ public class EventoPersistance implements EventoPersistancePort {
 
     @Override
     public void alterarEvento(Evento evento) {
-        eventoRepository.findByIdOptional(evento.getId());
-        var eventoEntity = eventoMapper.toEntity(evento);
+        var eventoEntity = eventoRepository.findByIdOptional(evento.getId()).get();
+        eventoEntity.setNome(evento.getNome());
+        eventoEntity.setDataInicial(evento.getDataInicial());
+        eventoEntity.setDataFinal(evento.getDataFinal());
+        eventoEntity.setAtivo(evento.getAtivo());
         eventoRepository.persist(eventoEntity);
     }
 
     @Override
     public void deletarEvento(Integer id) {
         eventoRepository.deleteById(id);
+    }
+
+    @Override
+    public void atualizarStatusEvento(Evento evento) {
+        var eventoEntity = eventoRepository.findById(evento.getId());
+        eventoEntity.setNome(evento.getNome());
+        eventoEntity.setDataInicial(evento.getDataInicial());
+        eventoEntity.setDataFinal(evento.getDataFinal());
+        eventoEntity.setAtivo(evento.getAtivo());
+        eventoRepository.persist(eventoEntity);
     }
 }

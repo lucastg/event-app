@@ -22,8 +22,8 @@ public class DeletarEventoUseCase implements DeletarEventoUseCasePort {
 
     @Override
     public void deletarEvento(Integer id) {
-        var te = eventoPersistancePort.buscarEventoPorId(id);
-        if (te.isEmpty()) {
+        var result = eventoPersistancePort.buscarEventoPorId(id);
+        if (result.isEmpty()) {
             throw new NoSuchElementException("Evento não encontrado com ID: " + id );
         }
         eventoPersistance.deletarEvento(id);

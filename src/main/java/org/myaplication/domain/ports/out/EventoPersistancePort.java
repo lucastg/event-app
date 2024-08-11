@@ -19,4 +19,6 @@ public interface EventoPersistancePort {
     void alterarEvento(Evento evento);
 
     void deletarEvento(Integer id);
+
+    void atualizarStatusEvento(Evento evento);
 }
