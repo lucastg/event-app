@@ -14,6 +14,13 @@ Este projeto é uma aplicação de gerenciamento de eventos construída com Java
 * Flyway: Ferramenta de migração de banco de dados.
 * Lombok: Biblioteca para reduzir o boilerplate no código Java.
 
+## Funcionalidades
+
+* Gerenciamento de Eventos: Criação, edição, exclusão e listagem de eventos.
+* Associação a Instituições: Cada evento é associado a uma instituição, e uma instituição pode ter vários eventos.
+* Validação de Dados: Uso de validações como @NotNull e @NotBlank para garantir a consistência dos dados.
+* Validação de Date: A cada 1 minuto é verificado as datas de inicio e fim do evento para alteração do status.
+
 ## Iniciar aplicação
 
 Você pode executar o aplicativo usando o comando:
@@ -23,3 +30,8 @@ Você pode executar o aplicativo usando o comando:
 ```
 
 > **_Obs:_**  Depois de executada você pode acessar o [Swagger](http://localhost:8080/q/dev/) da aplicação!
+
+## Considerações Finais
+Esta aplicação foi desenvolvida com foco em fornecer um sistema de gerenciamento de eventos simples, mas eficaz, utilizando as melhores práticas do desenvolvimento Java com Quarkus. 
+
+Contribuições e sugestões são bem-vindas!
