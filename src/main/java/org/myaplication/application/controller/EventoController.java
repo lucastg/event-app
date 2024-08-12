@@ -38,8 +38,12 @@ public class EventoController {
     public Response listarEventos() throws RuntimeException {
         try {
             return Response.ok(listarEventosUseCasePort.listarEventos()).build();
-        } catch (Exception e) {
+
+        } catch (NoSuchElementException e) {
             return Response.status(Response.Status.NOT_FOUND).entity("Sem Registros!").build();
+
+        } catch (Exception e) {
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
 
@@ -57,7 +61,7 @@ public class EventoController {
             return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
 
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro inesperado: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
 
@@ -73,7 +77,7 @@ public class EventoController {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
 
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro inesperado: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
 
@@ -89,7 +93,7 @@ public class EventoController {
             return Response.status(Response.Status.BAD_REQUEST).entity(e.getMessage()).build();
 
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro inesperado: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
 
@@ -105,7 +109,7 @@ public class EventoController {
             return Response.status(Response.Status.CONFLICT).entity(e.getMessage()).build();
 
         } catch (Exception e) {
-            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("Erro inesperado: " + e.getMessage()).build();
+            return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity(e.getMessage()).build();
         }
     }
 
