@@ -2,7 +2,9 @@ package org.myaplication.application.presenters.mappers;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import org.myaplication.domain.entities.Evento;
+import org.myaplication.domain.entities.Instituicao;
 import org.myaplication.infrastructure.db.entity.EventoEntity;
+import org.myaplication.infrastructure.db.entity.InstituicaoEntity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,32 +14,50 @@ import java.util.Optional;
 public class EventoMapper {
 
     public EventoEntity toEntity(Evento evento) {
+        var instituicaoEntity = new InstituicaoEntity();
+        instituicaoEntity.setId(evento.getInstituicao().getId());
+        instituicaoEntity.setNome(evento.getInstituicao().getNome());
+        instituicaoEntity.setTipo(evento.getInstituicao().getTipo());
+
         return new EventoEntity(
                 evento.getId(),
                 evento.getNome(),
                 evento.getDataInicial(),
                 evento.getDataFinal(),
-                evento.getAtivo()
+                evento.getAtivo(),
+                instituicaoEntity
         );
     }
 
     public Evento toDomain(EventoEntity eventoEntity) {
+        var instituicao = new Instituicao();
+        instituicao.setId(eventoEntity.getInstituicao().getId());
+        instituicao.setNome(eventoEntity.getInstituicao().getNome());
+        instituicao.setTipo(eventoEntity.getInstituicao().getTipo());
+
         return new Evento(
                 eventoEntity.getId(),
                 eventoEntity.getNome(),
                 eventoEntity.getDataInicial(),
                 eventoEntity.getDataFinal(),
-                eventoEntity.getAtivo()
+                eventoEntity.getAtivo(),
+                instituicao
         );
     }
 
     public Evento toDomain(Optional<EventoEntity> eventoEntity) {
+        var instituicao = new Instituicao();
+        instituicao.setId(eventoEntity.get().getInstituicao().getId());
+        instituicao.setNome(eventoEntity.get().getInstituicao().getNome());
+        instituicao.setTipo(eventoEntity.get().getInstituicao().getTipo());
+
         return new Evento(
                 eventoEntity.get().getId(),
                 eventoEntity.get().getNome(),
                 eventoEntity.get().getDataInicial(),
                 eventoEntity.get().getDataFinal(),
-                eventoEntity.get().getAtivo()
+                eventoEntity.get().getAtivo(),
+                instituicao
         );
     }
 

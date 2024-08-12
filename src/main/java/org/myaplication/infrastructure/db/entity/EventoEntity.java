@@ -16,23 +16,23 @@ import java.util.Date;
 @Table(name = "tb_eventos")
 public class EventoEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
     @Column(nullable = false)
     private String nome;
 
-    @Column(nullable = false)
+    @Column(name = "data_inicial", nullable = false)
     private Date dataInicial;
 
-    @Column(nullable = false)
+    @Column(name = "data_final", nullable = false)
     private Date dataFinal;
 
     @Column(nullable = false)
     private Boolean ativo;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_instituicao")
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_instituicao", nullable = false)
     private InstituicaoEntity instituicao;
 
     public EventoEntity(Integer id, String nome, Date dataInicial, Date dataFinal, Boolean ativo) {
